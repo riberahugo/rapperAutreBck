@@ -13,6 +13,55 @@ var xoauth2 = require('xoauth2');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
+var Mail = function(mail) {
+
+};
+
+Mail.createMail = function (email,key, result) {    
+
+    var mailOptions = {
+        from: "riberahugo13@gmail.com",
+        to: email,
+        subject: "Confirmation d'abonnement",
+        //text: req.body.message,
+        // html: '<b>' + req.body.message + '</b>'
+        html:
+                '<div style="text-align: center;width: 600px;height: 335px;margin: auto;padding-top: 25px;">' +
+                '<img style="width: 400px; height: 150px; object-fit: contain;" src="https://i.ibb.co/kJq5HwF/rapper-Autre.jpg" /><br><br>' +
+                '<span style="font-size : 15px;">Bienvenue nouvel apprenant! </span>' +
+                '<span style="font-size : 15px;">Vous avez été souscrit à l\'abonnement débutant.</span><br><br>' +
+                '<span style="font-size : 15px;">Veuillez cliquer sur le bouton ci dessous afin d\'activer votre compte.</span><br><br>' +
+                '<div style="background-color: #D32A23;width: 20%;margin: auto;height: 10%;border-radius: 10px;">'+
+                '<div style="padding-top: 6px;">' +
+                    '<a style="color:white;text-decoration: none" href=' + `http://localhost:4200/register/${key}` + '>Activation</a>' +
+                '</div>' +
+                '</div>' +
+                '</div>'
+    };    
+    
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: "riberahugo13@gmail.com",
+            pass: "Fucktoutestpris13!"
+        }
+    });
+
+    transporter.sendMail(mailOptions, function(err, info) {
+
+        if (err) {
+            console.log(err)
+        }
+        else {
+            return res.json({ message: 'Mail sent' });
+        }
+    });
+
+};
+
 // router.post('/invitation_compte', VerifyToken, function(req, res, next) {
 
 //     //getKeyByMail
@@ -255,4 +304,4 @@ router.use(bodyParser.json());
 // });
 
 
-module.exports = router;
+module.exports = Mail;

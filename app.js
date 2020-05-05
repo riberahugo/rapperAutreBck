@@ -25,4 +25,7 @@ app.use('/api/stripe', Stripe);
 var Invitation = require(__root + 'invitation/invitation');
 app.use('/api/invitation', Invitation);
 
+var Register = require(__root + 'user/UserController');
+app.use('/api/users', Register);
+
 module.exports = app;

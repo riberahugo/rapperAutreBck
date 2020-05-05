@@ -3,6 +3,9 @@ var router = express.Router();
 var db = require('../db')
 var bodyParser = require('body-parser');
 
+var User = require('../user/User');
+var Mail = require('../mail/MailController');
+
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
@@ -12,7 +15,7 @@ router.use(bodyParser.json());
 
 const stripe = require('stripe')('sk_test_dn1JDGQuqnnql3fTAk469Pnj00MOIs38kS');
 
-router.post('/', function(req, res, next) {
+router.post('/:email', function(req, res, next) {
 
     var amount = req.body;
 
@@ -27,6 +30,32 @@ router.post('/', function(req, res, next) {
             },
             function(err, charge) {
                 console.log(charge)
+
+                User.createUser(req.params.email,'debutant',function(err, user) {
+                    if (err) {
+                        return res.status(500).send({ error: 'Something failed!' })
+                    }
+                    else {
+
+                        User.getUserById(user,function(err, user_answer) {
+                            if (err) {
+                                return res.status(500).send({ error: 'Something failed!' })
+                            }
+                            else {
+                                console.log(user_answer)
+                                Mail.createMail(req.params.email,user_answer[0].key_register,function(err, user) {
+                                    if (err) {
+                                        return res.status(500).send({ error: 'Something failed!' })
+                                    }
+                                    else {
+                                        console.log('done.') 
+                                    }
+                                });
+                            }
+                        });
+                        
+                    }
+                });
             }
             
         );
@@ -42,6 +71,32 @@ router.post('/', function(req, res, next) {
             },
             function(err, charge) {
                 console.log(charge)
+
+                User.createUser(req.params.email,'pro',function(err, user) {
+                    if (err) {
+                        return res.status(500).send({ error: 'Something failed!' })
+                    }
+                    else {
+
+                        User.getUserById(user,function(err, user_answer) {
+                            if (err) {
+                                return res.status(500).send({ error: 'Something failed!' })
+                            }
+                            else {
+                                console.log(user_answer)
+                                Mail.createMail(req.params.email,user_answer[0].key_register,function(err, user) {
+                                    if (err) {
+                                        return res.status(500).send({ error: 'Something failed!' })
+                                    }
+                                    else {
+                                        console.log('done.') 
+                                    }
+                                });
+                            }
+                        });
+                        
+                    }
+                });
             }
             
         );
@@ -85,6 +140,32 @@ router.post('/abonnement/:plan', function(req, res, next) {
                 },
                 function(err, subscriptions) {
                     console.log(subscriptions)
+
+                    User.createUser(token.email,'debutant',function(err, user) {
+                        if (err) {
+                            return res.status(500).send({ error: 'Something failed!' })
+                        }
+                        else {
+
+                            User.getUserById(user,function(err, user_answer) {
+                                if (err) {
+                                    return res.status(500).send({ error: 'Something failed!' })
+                                }
+                                else {
+                                    console.log(user_answer)
+                                    Mail.createMail(token.email,user_answer[0].key_register,function(err, user) {
+                                        if (err) {
+                                            return res.status(500).send({ error: 'Something failed!' })
+                                        }
+                                        else {
+                                            console.log('done.') 
+                                        }
+                                    });
+                                }
+                            });
+                            
+                        }
+                    });
                 }
                 );
             }
@@ -96,12 +177,38 @@ router.post('/abonnement/:plan', function(req, res, next) {
                     cancel_at: cancelatPro, //nb de sconde dans une semaine
                     items: [
                         {
-                            plan: 'plan_HCifskulHJ6uev'
+                            plan: 'plan_HDsmiOfwFm8YTb'
                         }
                     ]
                 },
                 function(err, subscriptions) {
                     console.log(subscriptions)
+
+                    User.createUser(token.email,'pro',function(err, user) {
+                        if (err) {
+                            return res.status(500).send({ error: 'Something failed!' })
+                        }
+                        else {
+
+                            User.getUserById(user,function(err, user_answer) {
+                                if (err) {
+                                    return res.status(500).send({ error: 'Something failed!' })
+                                }
+                                else {
+                                    console.log(user_answer)
+                                    Mail.createMail(token.email,user_answer[0].key_register,function(err, user) {
+                                        if (err) {
+                                            return res.status(500).send({ error: 'Something failed!' })
+                                        }
+                                        else {
+                                            console.log('done.') 
+                                        }
+                                    });
+                                }
+                            });
+                            
+                        }
+                    });
                 }
                 );
             }
