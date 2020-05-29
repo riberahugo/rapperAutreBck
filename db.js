@@ -1,9 +1,9 @@
 var mysql=require('mysql');
 
 var connection=mysql.createConnection({
-  host:'http://ec2-15-188-87-82.eu-west-3.compute.amazonaws.com',
+  host:'localhost',
   user:'root',
-  password:'francky',
+  password:'franky',
   database:'rapperautre',
   charset : 'utf8mb4'
 });
