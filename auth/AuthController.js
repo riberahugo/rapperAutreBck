@@ -20,16 +20,20 @@ router.post('/login', function(req, res) {
   var password = req.body.password;
   //var id = req.userId
 
-  var sql = `SELECT * FROM users WHERE email='${email}' AND password=MD5('${password}')`;
+  var sql = `SELECT * FROM user WHERE email='${email}' AND password='${password}'`;
+
+  console.log(sql)
 
   db.query(sql, function(err, row, fields) {
     if(err) {
       return res.status(500).send({ error: 'Something failed!' })
     }
     if (!row[0]) {
-      return res.status(404).send('Email et/ou Mot de passe incorrect.');
+      console.log(row)
+      return res.status(200).send([]);
     }
     if (row[0]) {
+      console.log(row)
       // create a token
       var token = jwt.sign({ id: row[0].id }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
@@ -37,20 +41,9 @@ router.post('/login', function(req, res) {
 
       var x = (new Date()).getTimezoneOffset() * 60000; 
 
-      let user_connexion = {
-          last_connexion: (new Date(Date.now() - x)).toISOString().slice(0,-1).replace(/-/g, '').replace(/ /g, '').replace(/:/g, '').replace(/T/g, ' ').replace(/\..+/g, '').replace(/ /g, '').toString(),
-          //new Date().toISOString().replace(/-/g, '').replace(/ /g, '').replace(/:/g, '').replace(/T/g, ' ').replace(/\..+/g, '').toString(),
-          id:row[0].id
-      }
+      console.log("coucou mec")
 
-      User.updateLastConnexion(user_connexion, function(err, company) {
-        if (err) {
-            return res.status(500).send({ error: 'Something failed!' })
-        }
-        else {
-            return res.status(200).send({ auth: true, token: token });
-        }
-      });
+      return res.status(200).send({ auth: true, token: token });
 
       // return the information including token as JSON
       
@@ -69,8 +62,12 @@ router.get('/logout', function(req, res) {
 
 router.get('/me', VerifyToken, function(req, res, next) {
 
+
+
   var id = req.userId;
-  var sql = `SELECT id, role, first_name, last_name, email, uploaded_image, cover_social, about, private, date, id_company, name_company, telephone FROM users WHERE id='${id}'`;
+  var sql = `SELECT id, role, current_lesson, email FROM user WHERE id='${id}'`;
+
+  console.log(sql)
 
   db.query(sql, function(err, row, fields) {
     if(err) {
