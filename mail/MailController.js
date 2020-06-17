@@ -33,7 +33,7 @@ Mail.createMail = function (email,key, result) {
                 '<span style="font-size : 15px;">Veuillez cliquer sur le bouton ci dessous afin d\'activer votre compte.</span><br><br>' +
                 '<div style="background-color: #D32A23;width: 20%;margin: auto;height: 10%;border-radius: 10px;">'+
                 '<div style="padding-top: 6px;">' +
-                    '<a style="color:white;text-decoration: none" href=' + `http://localhost:4200/register/${key}` + '>Activation</a>' +
+                    '<a style="color:white;text-decoration: none" href=' + `https://rapperautre.com/register/${key}` + '>Activation</a>' +
                 '</div>' +
                 '</div>' +
                 '</div>'

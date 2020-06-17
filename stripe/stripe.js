@@ -123,11 +123,17 @@ router.post('/abonnement/:plan', function(req, res, next) {
             var cancelatDebutant = (Date.now() / 1000) + 13 * 604800 // 13 semaines
             cancelatDebutant = Math.round(cancelatDebutant)
 
+            var cancelatDebutantMois = (Date.now() / 1000) + 56 * 604800 // 13 mois
+            cancelatDebutantMois = Math.round(cancelatDebutantMois)
+
             var cancelatPro = (Date.now() / 1000) + 10 * 604800 // 10 semaines
             cancelatPro = Math.round(cancelatPro)
 
-            if(plan == 'debutant'){
+            var cancelatProMois = (Date.now() / 1000) + 44 * 604800 // 10 mois
+            cancelatProMois = Math.round(cancelatProMois)
 
+            if(plan == 'debutant'){
+                console.log('debutant')
                 stripe.subscriptions.create({
                     customer: customer.id,
                     //cancel_at_period_end: true,
@@ -142,6 +148,92 @@ router.post('/abonnement/:plan', function(req, res, next) {
                     console.log(subscriptions)
 
                     User.createUser(token.email,'debutant',function(err, user) {
+                        if (err) {
+                            return res.status(500).send({ error: 'Something failed!' })
+                        }
+                        else {
+
+                            User.getUserById(user,function(err, user_answer) {
+                                if (err) {
+                                    return res.status(500).send({ error: 'Something failed!' })
+                                }
+                                else {
+                                    console.log(user_answer)
+                                    Mail.createMail(token.email,user_answer[0].key_register,function(err, user) {
+                                        if (err) {
+                                            return res.status(500).send({ error: 'Something failed!' })
+                                        }
+                                        else {
+                                            console.log('done.') 
+                                        }
+                                    });
+                                }
+                            });
+                            
+                        }
+                    });
+                }
+                );
+            }
+            if(plan == 'debutantMois'){
+                console.log('debutantmois')
+                stripe.subscriptions.create({
+                    customer: customer.id,
+                    //cancel_at_period_end: true,
+                    cancel_at: cancelatDebutantMois, //nb de sconde dans une mois
+                    items: [
+                        {
+                            plan: 'price_HMWZdZCcUr2vHo'
+                        }
+                    ]
+                },
+                function(err, subscriptions) {
+                    console.log(subscriptions)
+
+                    User.createUser(token.email,'debutant',function(err, user) {
+                        if (err) {
+                            return res.status(500).send({ error: 'Something failed!' })
+                        }
+                        else {
+
+                            User.getUserById(user,function(err, user_answer) {
+                                if (err) {
+                                    return res.status(500).send({ error: 'Something failed!' })
+                                }
+                                else {
+                                    console.log(user_answer)
+                                    Mail.createMail(token.email,user_answer[0].key_register,function(err, user) {
+                                        if (err) {
+                                            return res.status(500).send({ error: 'Something failed!' })
+                                        }
+                                        else {
+                                            console.log('done.') 
+                                        }
+                                    });
+                                }
+                            });
+                            
+                        }
+                    });
+                }
+                );
+            }
+            if(plan == 'proMois'){
+
+                stripe.subscriptions.create({
+                    customer: customer.id,
+                    //cancel_at_period_end: true,
+                    cancel_at: cancelatProMois, //nb de sconde dans une mois
+                    items: [
+                        {
+                            plan: 'price_HMWZxhCrnEOZCC'
+                        }
+                    ]
+                },
+                function(err, subscriptions) {
+                    console.log(subscriptions)
+
+                    User.createUser(token.email,'pro',function(err, user) {
                         if (err) {
                             return res.status(500).send({ error: 'Something failed!' })
                         }
