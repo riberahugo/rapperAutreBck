@@ -17,7 +17,7 @@ Forma.updateItem = function (body,file_pdf, result) {
     file.name = body.key;   
     
     if(file.mimetype == "application/pdf"){
-        file.mv('public/images/pdf/' + '/' + file.name +'.pdf');
+        file.mv('public/images/pdf/' + file.name +'.pdf');
     }
 
     if(body.lvl == 'debutant'){
@@ -27,7 +27,22 @@ Forma.updateItem = function (body,file_pdf, result) {
             SET item = '${body.pack}'
         WHERE id = 1`
 
+        console.log(sqll)
     }
+
+    if(body.lvl == 'pro'){
+
+        var sqll = 
+        `UPDATE pack_pro
+            SET item = '${body.pack}'
+        WHERE id = 1`
+
+       console.log(sqll)
+        
+    }
+
+    console.log('------')
+    console.log(body.lvl)
     
     sql.query(sqll, function (err, res) {
         if(err) {

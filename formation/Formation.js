@@ -42,6 +42,7 @@ router.get('/get_formation_pro', function(req, result, next) {
 router.put('/update_item', function(req, res, next) {
 
     var body = req.body;
+    console.log(body)
 
     Forma.updateItem(body,req.files.pdf, function(err, info, next) {
         if (err) {
