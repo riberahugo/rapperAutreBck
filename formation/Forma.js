@@ -12,12 +12,17 @@ var Forma = function(formation) {
 
 Forma.updateItem = function (body,file_pdf, result) {    
 
-    var file = file_pdf;
-    console.log(file)
-    file.name = body.key;   
-    
-    if(file.mimetype == "application/pdf"){
-        file.mv('public/images/pdf/' + file.name +'.pdf');
+    console.log('yoooooo')
+    console.log(file_pdf)
+
+    if(file_pdf != ''){
+        var file = file_pdf;
+        console.log(file)
+        file.name = body.key;   
+        
+        if(file.mimetype == "application/pdf"){
+            file.mv('public/images/pdf/' + file.name +'.pdf');
+        }
     }
 
     if(body.lvl == 'debutant'){

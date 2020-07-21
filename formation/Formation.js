@@ -44,7 +44,13 @@ router.put('/update_item', function(req, res, next) {
     var body = req.body;
     console.log(body)
 
-    Forma.updateItem(body,req.files.pdf, function(err, info, next) {
+    if(req.files == null){
+        var pdf = ''
+    }else{
+        var pdf = req.files.pdf
+    }
+
+    Forma.updateItem(body,pdf, function(err, info, next) {
         if (err) {
             return res.status(500).send({ error: 'Something failed!' })
         }
