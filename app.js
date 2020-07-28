@@ -8,6 +8,9 @@ global.__root   = __dirname + '/';
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
+//app.use(express.bodyParser({limit: '50mb'}));
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 
 
 app.use(express.static('./dist/'));
