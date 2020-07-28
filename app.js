@@ -3,15 +3,17 @@ var app = express();
 var path = require('path');
 var cors = require('cors');
 var fileUpload = require('express-fileupload');
+var bodyParser = require('body-parser')
+ 
 global.__root   = __dirname + '/';
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
-//app.use(express.bodyParser({limit: '50mb'}));
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb'}));
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:52428800}));
 
 app.use(express.static('./dist/'));
 
