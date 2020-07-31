@@ -13,7 +13,7 @@ router.use(bodyParser.json());
 
 // var price;
 
-const stripe = require('stripe')('sk_test_dn1JDGQuqnnql3fTAk469Pnj00MOIs38kS');
+const stripe = require('stripe')('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');
 
 router.post('/:email', function(req, res, next) {
 
